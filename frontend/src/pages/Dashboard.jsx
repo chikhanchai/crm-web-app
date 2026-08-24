@@ -12,10 +12,10 @@ const ALL_COLUMNS = [
   { key: "CURR_BU", label: "Business Unit" },
   { key: "SET_STATUS", label: "SET Status" },
   { key: "FOCUS_TIER", label: "Focus Tier" },
-  { key: "CAPITAL_THB", label: "Capital (THB)" },
-  { key: "LATEST_REVENUE_THB", label: "Revenue" },
-  { key: "LATEST_NET_PROFIT_THB", label: "Net Profit" },
-  { key: "EST_NUM_BRANCHES", label: "Branches" },
+  { key: "CAPITAL_THB", label: "Capital (THB)" , isNum: true },
+  { key: "LATEST_REVENUE_THB", label: "Revenue" , isNum: true },
+  { key: "LATEST_NET_PROFIT_THB", label: "Net Profit" , isNum: true },
+  { key: "EST_NUM_BRANCHES", label: "Branches" , isNum: true },
   { key: "KEY_DECISION_MAKER", label: "Decision Maker" },
   { key: "DM_CONTACT_INFO", label: "Contact Info" },
   { key: "OFFICIAL_WEBSITE", label: "Website" },
@@ -46,32 +46,39 @@ const ALL_COLUMNS = [
   { key: "OPP_CYBER_SECURITY", label: "OPP Security" },
   { key: "OPP_SMART_RETAIL_IOT", label: "OPP IoT" },
   { key: "OPP_OMNICHANNEL_CRM", label: "OPP CRM" },
-  { key: "EST_DEAL_VALUE_THB", label: "Est. Deal Value" },
+  { key: "EST_DEAL_VALUE_THB", label: "Est. Deal Value" , isNum: true },
   { key: "EGG_DATA_ANALYTICS", label: "Egg Data Analytics" },
   { key: "EGG_MARTECH_LINE_CRM", label: "Egg CRM" },
   { key: "EGG_SMART_SMS_A2P", label: "Egg SMS" },
   { key: "EGG_RETAIL_MEDIA_ADS", label: "Egg Ads" },
   { key: "TRUE_EGG_SYNERGY_PROPOSAL", label: "True+Egg Proposal" },
-  { key: "EST_EGG_ANNUAL_REVENUE_THB", label: "Egg Rev." },
+  { key: "EST_EGG_ANNUAL_REVENUE_THB", label: "Egg Rev." , isNum: true },
   { key: "TRUE_IDC_COLOCATION_DC", label: "IDC Colocation" },
   { key: "TRUE_IDC_MULTI_CLOUD", label: "IDC Multi-Cloud" },
   { key: "TRUE_IDC_CLOUD_DIRECT_CONNECT", label: "IDC Direct Connect" },
   { key: "TRUE_IDC_SECURITY_DRAAS", label: "IDC Security" },
   { key: "TRI_PARTY_SYNERGY_PROPOSAL", label: "Tri-Party Proposal" },
-  { key: "EST_TRUE_IDC_ANNUAL_REV_THB", label: "IDC Rev." },
+  { key: "EST_TRUE_IDC_ANNUAL_REV_THB", label: "IDC Rev." , isNum: true },
   { key: "TDG_DIGITAL_SOLUTIONS", label: "TDG IoT" },
   { key: "TDG_TRUE_ANALYTICS", label: "TDG Analytics" },
   { key: "TDG_CYBERSECURITY", label: "TDG Security" },
   { key: "TDG_DIGITAL_ACADEMY", label: "TDG Academy" },
   { key: "TRUE_ECOSYSTEM_QUAD_SYNERGY", label: "Quad-Party Proposal" },
-  { key: "EST_TDG_ANNUAL_REV_THB", label: "TDG Rev." },
+  { key: "EST_TDG_ANNUAL_REV_THB", label: "TDG Rev." , isNum: true },
   { key: "GREENMOONS_AI_RPA", label: "Greenmoons RPA" },
   { key: "GREENMOONS_IT_DIGITAL_SOLUTION", label: "Greenmoons IT" },
   { key: "GREENMOONS_SOLUTION_FIT", label: "Greenmoons Fit" },
   { key: "GREENMOONS_SUSTAINABILITY_TECH", label: "Greenmoons Sustainability" },
   { key: "TRUE_GREENMOONS_DIGITAL_SYNERGY", label: "5-Pillar Proposal" },
-  { key: "EST_GREENMOONS_ANNUAL_REV_THB", label: "Greenmoons Rev." },
+  { key: "EST_GREENMOONS_ANNUAL_REV_THB", label: "Greenmoons Rev." , isNum: true },
 ];
+
+
+const formatNumber = (val) => {
+  if (val === null || val === undefined || val === '') return '-';
+  const num = Number(val);
+  return isNaN(num) ? val : num.toLocaleString('en-US');
+};
 
 export default function Dashboard() {
   const [customers, setCustomers] = useState([]);
@@ -83,6 +90,10 @@ export default function Dashboard() {
   const [industry, setIndustry] = useState('All');
   const [bu, setBu] = useState('All');
   const [ae, setAe] = useState('All');
+  
+  const [focusTier, setFocusTier] = useState('All');
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
   
   const [viewMode, setViewMode] = useState('summary'); // 'summary' or 'excel'
   
@@ -150,6 +161,32 @@ export default function Dashboard() {
     navigate('/login');
   };
 
+  const uniqueTiers = Array.from(new Set(customers.map(c => c.FOCUS_TIER).filter(Boolean))).sort();
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') direction = 'desc';
+    setSortConfig({ key, direction });
+  };
+
+  const displayedCustomers = customers
+    .filter(c => focusTier === 'All' || c.FOCUS_TIER === focusTier)
+    .sort((a, b) => {
+      if (!sortConfig.key) return 0;
+      const aVal = a[sortConfig.key];
+      const bVal = b[sortConfig.key];
+      if (aVal === bVal) return 0;
+      if (aVal === null || aVal === undefined || aVal === '') return 1;
+      if (bVal === null || bVal === undefined || bVal === '') return -1;
+      
+      const colDef = ALL_COLUMNS.find(col => col.key === sortConfig.key);
+      if (colDef && colDef.isNum) {
+        return sortConfig.direction === 'asc' ? Number(aVal) - Number(bVal) : Number(bVal) - Number(aVal);
+      }
+      return sortConfig.direction === 'asc' ? String(aVal).localeCompare(String(bVal)) : String(bVal).localeCompare(String(aVal));
+    });
+
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Navbar */}
@@ -189,6 +226,19 @@ export default function Dashboard() {
                 />
                 <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
               </div>
+            </div>
+            
+
+            <div className="w-48">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Focus Tier</label>
+              <select 
+                className="w-full p-2 border border-gray-300 rounded shadow-sm bg-white"
+                value={focusTier}
+                onChange={(e) => setFocusTier(e.target.value)}
+              >
+                <option value="All">All Tiers</option>
+                {uniqueTiers.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
             </div>
             
             <div className="w-48">
@@ -260,7 +310,7 @@ export default function Dashboard() {
             </button>
           </div>
           <div className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full border border-gray-200 shadow-sm">
-            Total Records: <span className="font-bold text-gray-800">{customers.length}</span>
+            Total Records: <span className="font-bold text-gray-800">{displayedCustomers.length}</span>
           </div>
         </div>
 
@@ -279,7 +329,7 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {customers.map((c) => (
+                {displayedCustomers.map((c) => (
                   <tr key={c.id} className="hover:bg-blue-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{c.CUSTOMER_NAME}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-500">{c.M_BUSINESS_ID || '-'}</td>
@@ -306,22 +356,27 @@ export default function Dashboard() {
                 <thead className="bg-gray-100 sticky top-0 shadow-sm z-10">
                   <tr>
                     <th className="px-4 py-2 text-left font-bold text-gray-700 border-r border-gray-200 bg-gray-100 sticky left-0 z-20">Actions</th>
-                    {ALL_COLUMNS.map(col => (
-                      <th key={col.key} className="px-4 py-2 text-left font-bold text-gray-600 border-r border-gray-200 whitespace-nowrap">
+                                        {ALL_COLUMNS.map(col => (
+                      <th 
+                        key={col.key} 
+                        onClick={() => handleSort(col.key)}
+                        className="px-4 py-2 text-left font-bold text-gray-600 border-r border-gray-200 whitespace-nowrap cursor-pointer hover:bg-gray-200 select-none"
+                      >
                         {col.label}
+                        {sortConfig.key === col.key ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
                       </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {customers.map((c) => (
+                  {displayedCustomers.map((c) => (
                     <tr key={c.id} className="hover:bg-green-50 transition-colors">
                       <td className="px-4 py-2 whitespace-nowrap border-r border-gray-200 bg-white sticky left-0 z-10">
                         <Link to={`/customers/${c.id}`} className="text-blue-600 font-bold hover:underline">Edit</Link>
                       </td>
-                      {ALL_COLUMNS.map(col => (
+                                            {ALL_COLUMNS.map(col => (
                         <td key={col.key} className="px-4 py-2 border-r border-gray-100 whitespace-nowrap text-gray-700 max-w-[300px] overflow-hidden text-ellipsis">
-                          {c[col.key] !== null && c[col.key] !== undefined ? String(c[col.key]) : '-'}
+                          {col.isNum ? formatNumber(c[col.key]) : (c[col.key] !== null && c[col.key] !== undefined ? String(c[col.key]) : '-')}
                         </td>
                       ))}
                     </tr>
