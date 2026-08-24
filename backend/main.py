@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import auth, customers, users
+import auth
+from routers import customers, users
 
 app = FastAPI(title="CRM System")
 
