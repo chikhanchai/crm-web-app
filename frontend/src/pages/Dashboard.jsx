@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { LogOut, Search, Building, TableProperties, List, Download , HelpCircle } from 'lucide-react';
+import { LogOut, Search, Building, TableProperties, List, Download , HelpCircle, Users } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
 const ALL_COLUMNS = [
@@ -202,7 +202,7 @@ export default function Dashboard() {
             <Link to="/help" className="flex items-center gap-1 text-blue-600 hover:bg-blue-50 px-3 py-1 rounded transition"><HelpCircle size={16} /> <span className="font-medium">Help / คู่มือ</span></Link>
           {user.role === 'Admin' && (
             <Link to="/users" className="flex items-center gap-1 text-gray-600 hover:bg-gray-100 px-3 py-1 rounded transition">
-              <span className="font-medium">ÃƒÂ¢Ã…Â¡Ã¢â€žÂ¢ÃƒÂ¯Ã‚Â¸Ã‚Â Users</span>
+              <Users size={16} /> <span className="font-medium">Users</span>
             </Link>
           )}
           <button onClick={handleLogout} className="flex items-center gap-1 text-red-600 hover:bg-red-50 px-3 py-1 rounded">
