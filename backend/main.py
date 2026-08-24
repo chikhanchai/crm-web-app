@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import auth
-from routers import customers
+from routers import auth, customers, users
 
-app = FastAPI(title="CRM Web App API")
+app = FastAPI(title="CRM System")
 
 # Allow CORS for React frontend (default port 5173)
 app.add_middleware(
@@ -16,6 +15,7 @@ app.add_middleware(
 
 app.include_router(auth.router, tags=["Authentication"])
 app.include_router(customers.router, prefix="/api/customers", tags=["Customers"])
+app.include_router(users.router)
 
 @app.get("/")
 def root():
