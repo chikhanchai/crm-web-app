@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeft, Save } from 'lucide-react';
+import InteractionsTab from '../components/InteractionsTab';
+import OpportunitiesTab from '../components/OpportunitiesTab';
+import WalletTab from '../components/WalletTab';
 
 export default function CustomerDetail() {
   const { id } = useParams();
@@ -51,6 +54,9 @@ export default function CustomerDetail() {
   if (!customer) return <div className="p-10 text-center">Loading...</div>;
 
   const tabs = [
+    { id: 'activities', label: 'Activity Log' },
+    { id: 'opportunities_v2', label: 'Opportunities (V2)' },
+    { id: 'wallet', label: 'Share of Wallet' },
     { id: 'overview', label: 'Overview & Contact' },
     { id: 'digital', label: 'Digital & Tech Stack' },
     { id: 'needs', label: 'Sales & Needs' },
@@ -189,6 +195,10 @@ export default function CustomerDetail() {
               </div>
             </div>
           )}
+
+          {activeTab === 'activities' && <InteractionsTab customerId={id} />}
+          {activeTab === 'opportunities_v2' && <OpportunitiesTab customerId={id} />}
+          {activeTab === 'wallet' && <WalletTab customerId={id} />}
 
           {activeTab === 'synergy' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
