@@ -357,10 +357,10 @@ export default function Dashboard() {
                   <tr>
                     <th className="px-4 py-2 text-left font-bold text-gray-700 border-r border-gray-200 bg-gray-100 sticky left-0 z-20">Actions</th>
                                         {ALL_COLUMNS.map(col => (
-                      <th 
-                        key={col.key} 
+                      <th
+                        key={col.key}
                         onClick={() => handleSort(col.key)}
-                        className="px-4 py-2 text-left font-bold text-gray-600 border-r border-gray-200 whitespace-nowrap cursor-pointer hover:bg-gray-200 select-none"
+                        className={`px-4 py-2 font-bold text-gray-600 border-r border-gray-200 whitespace-nowrap cursor-pointer hover:bg-gray-200 select-none ${col.isNum ? "text-right" : "text-left"}`}
                       >
                         {col.label}
                         {sortConfig.key === col.key ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
@@ -375,7 +375,7 @@ export default function Dashboard() {
                         <Link to={`/customers/${c.id}`} className="text-blue-600 font-bold hover:underline">Edit</Link>
                       </td>
                                             {ALL_COLUMNS.map(col => (
-                        <td key={col.key} className="px-4 py-2 border-r border-gray-100 whitespace-nowrap text-gray-700 max-w-[300px] overflow-hidden text-ellipsis">
+                        <td key={col.key} className={`px-4 py-2 border-r border-gray-100 whitespace-nowrap text-gray-700 max-w-[300px] overflow-hidden text-ellipsis ${col.isNum ? "text-right" : "text-left"}`}>
                           {col.isNum ? formatNumber(c[col.key]) : (c[col.key] !== null && c[col.key] !== undefined ? String(c[col.key]) : '-')}
                         </td>
                       ))}
