@@ -1,8 +1,8 @@
-import { API_BASE_URL } from '../config';
+﻿import { API_BASE_URL } from '../config';
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { LogOut, Search, Building, TableProperties, List, Download } from 'lucide-react';
+import { LogOut, Search, Building, TableProperties, List, Download , HelpCircle } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
 const ALL_COLUMNS = [
@@ -199,9 +199,10 @@ export default function Dashboard() {
           <div className="text-sm text-gray-600">
             Logged in as: <span className="font-bold">{user.full_name}</span> ({user.role})
           </div>
+            <Link to="/help" className="flex items-center gap-1 text-blue-600 hover:bg-blue-50 px-3 py-1 rounded transition"><HelpCircle size={16} /> <span className="font-medium">Help / คู่มือ</span></Link>
           {user.role === 'Admin' && (
             <Link to="/users" className="flex items-center gap-1 text-gray-600 hover:bg-gray-100 px-3 py-1 rounded transition">
-              <span className="font-medium">⚙️ Users</span>
+              <span className="font-medium">ÃƒÂ¢Ã…Â¡Ã¢â€žÂ¢ÃƒÂ¯Ã‚Â¸Ã‚Â Users</span>
             </Link>
           )}
           <button onClick={handleLogout} className="flex items-center gap-1 text-red-600 hover:bg-red-50 px-3 py-1 rounded">
@@ -363,7 +364,7 @@ export default function Dashboard() {
                         className={`px-4 py-2 font-bold text-gray-600 border-r border-gray-200 whitespace-nowrap cursor-pointer hover:bg-gray-200 select-none ${col.isNum ? "text-right" : "text-left"}`}
                       >
                         {col.label}
-                        {sortConfig.key === col.key ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+                        {sortConfig.key === col.key ? (sortConfig.direction === 'asc' ? ' ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬Ëœ' : ' ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬Å“') : ''}
                       </th>
                     ))}
                   </tr>
