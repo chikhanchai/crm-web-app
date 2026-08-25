@@ -45,7 +45,7 @@ export default function CustomerProfileModal({ customer, onClose }) {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-3xl font-black text-gray-900">{customer.CUSTOMER_NAME}</h2>
-              <span className={px-3 py-1 rounded-full text-sm font-bold border \}>
+              <span className={`px-3 py-1 rounded-full text-sm font-bold border ${getTierBadgeClass(customer.FOCUS_TIER)}`}>
                 {customer.FOCUS_TIER || 'No Tier'}
               </span>
             </div>
@@ -164,7 +164,7 @@ export default function CustomerProfileModal({ customer, onClose }) {
                   {ecosystem.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
                       {ecosystem.map(eco => (
-                        <span key={eco.name} className={px-2 py-1 rounded text-xs font-bold border \}>
+                        <span key={eco.name} className={`px-2 py-1 rounded text-xs font-bold border ${eco.color}`}>
                           {eco.name}
                         </span>
                       ))}
@@ -182,7 +182,7 @@ export default function CustomerProfileModal({ customer, onClose }) {
         {/* Footer (Sticky) */}
         <div className="p-4 bg-white border-t border-gray-100 rounded-b-2xl flex justify-end sticky bottom-0 shrink-0">
           <Link 
-            to={/customers/\} 
+            to={`/customers/${customer.id}`} 
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-sm transition flex items-center gap-2"
           >
             Go to Full Profile & Edit
