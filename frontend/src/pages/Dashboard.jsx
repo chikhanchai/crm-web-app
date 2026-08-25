@@ -4,6 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { LogOut, Search, Building, TableProperties, List, Download , HelpCircle, Users, ChevronUp, ChevronDown } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import CustomerProfileModal from '../components/CustomerProfileModal';
+
 
 const ALL_COLUMNS = [
   { key: "CUSTOMER_NAME", label: "Customer Name" },
@@ -112,6 +114,8 @@ export default function Dashboard() {
   const [industry, setIndustry] = useState('All');
   const [bu, setBu] = useState('All');
   const [ae, setAe] = useState('All');
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+
   
   const [focusTier, setFocusTier] = useState('All');
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
@@ -354,7 +358,7 @@ export default function Dashboard() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {displayedCustomers.map((c) => (
                   <tr key={c.id} className={`transition-colors group ${getRowColorClass(c.FOCUS_TIER)}`}>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{c.CUSTOMER_NAME}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-blue-600 cursor-pointer hover:underline" onClick={() => setSelectedCustomer(c)}>{c.CUSTOMER_NAME}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-500">{c.M_BUSINESS_ID || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-500">
                       <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">{c.INDUSTRY_SEGMENT || '-'}</span>
@@ -399,7 +403,7 @@ export default function Dashboard() {
                       </td>
                                             {ALL_COLUMNS.map(col => (
                         <td key={col.key} className={`px-4 py-2 border-r border-gray-100 whitespace-nowrap text-gray-700 max-w-[300px] overflow-hidden text-ellipsis ${col.isNum ? "text-right" : "text-left"}`}>
-                          {col.isNum ? formatNumber(c[col.key]) : (c[col.key] !== null && c[col.key] !== undefined ? String(c[col.key]) : '-')}
+                          {col.key === 'CUSTOMER_NAME' ? <span className="text-blue-600 cursor-pointer hover:underline font-bold" onClick={() => setSelectedCustomer(c)}>{c[col.key]}</span> : (col.isNum ? formatNumber(c[col.key]) : (c[col.key] !== null && c[col.key] !== undefined ? String(c[col.key]) : '-'))}
                         </td>
                       ))}
                     </tr>
@@ -416,7 +420,14 @@ export default function Dashboard() {
             </div>
           )}
         </div>
-      </div>
+  
+      {selectedCustomer && (
+        <CustomerProfileModal 
+          customer={selectedCustomer} 
+          onClose={() => setSelectedCustomer(null)} 
+        />
+      )}
+    </div>
     </div>
   );
 }
