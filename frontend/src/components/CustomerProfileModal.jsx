@@ -214,57 +214,6 @@ export default function CustomerProfileModal({ customer, onClose }) {
                 </div>
               </div>
 
-              {/* Section 5: Business Needs & Challenges */}
-              <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2 border-b pb-2">
-                  <AlertTriangle className="text-orange-500" /> Business Needs & Challenges
-                </h3>
-                <p className="text-gray-700 text-sm whitespace-pre-wrap leading-relaxed">
-                  {customer.KEY_PAIN_POINT || 'No business challenges recorded.'}
-                </p>
-              </div>
-
-              {/* Section 6: Share of Wallet (Competitor Info) */}
-              <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2 border-b pb-2">
-                  <Wallet className="text-purple-600" /> Share of Wallet (Competitors & IT Spending)
-                </h3>
-                {loadingWallets ? (
-                  <p className="text-gray-500 text-sm flex items-center gap-2">
-                    <Loader2 className="animate-spin text-purple-600" size={16} /> Loading data...
-                  </p>
-                ) : wallets.length > 0 ? (
-                  <div className="overflow-x-auto border border-gray-200 rounded-lg">
-                    <table className="w-full text-sm text-left">
-                      <thead className="bg-gray-50 text-gray-600 font-bold border-b border-gray-200">
-                        <tr>
-                          <th className="px-4 py-3">Category</th>
-                          <th className="px-4 py-3">Vendor</th>
-                          <th className="px-4 py-3 text-right">Price/Mo (THB)</th>
-                          <th className="px-4 py-3">Contract Exp.</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-100">
-                        {wallets.map(w => (
-                          <tr key={w.id} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-4 py-3 font-medium text-gray-800">{w.product_category}</td>
-                            <td className="px-4 py-3 text-gray-600">{w.current_vendor}</td>
-                            <td className="px-4 py-3 text-right font-medium text-gray-700">
-                              {w.current_price_thb ? formatNumber(w.current_price_thb) : '-'}
-                            </td>
-                            <td className="px-4 py-3 text-gray-500">{w.contract_expiry_date || '-'}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <p className="text-gray-500 text-sm italic bg-gray-50 p-4 rounded-lg text-center border border-dashed border-gray-200">
-                    No competitor or wallet data recorded for this customer yet.
-                  </p>
-                )}
-              </div>
-
               {/* Section 4: Opportunities */}
               <div className="bg-gradient-to-br from-blue-900 to-blue-700 p-5 rounded-xl shadow-sm text-white">
                 <h3 className="text-lg font-bold mb-4 flex items-center gap-2 border-b border-blue-500 pb-2">
