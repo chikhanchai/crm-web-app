@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { LogOut, Search, Building, TableProperties, List, Download , HelpCircle, Users } from 'lucide-react';
+import { LogOut, Search, Building, TableProperties, List, Download , HelpCircle, Users, ChevronUp, ChevronDown } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
 const ALL_COLUMNS = [
@@ -386,7 +386,7 @@ export default function Dashboard() {
                         className={`px-4 py-2 font-bold text-gray-600 border-r border-gray-200 whitespace-nowrap cursor-pointer hover:bg-gray-200 select-none ${col.isNum ? "text-right" : "text-left"}`}
                       >
                         {col.label}
-                        {sortConfig.key === col.key ? (sortConfig.direction === 'asc' ? ' ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬Ëœ' : ' ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬Å“') : ''}
+                        {sortConfig.key === col.key ? (sortConfig.direction === 'asc' ? <ChevronUp size={14} className="inline ml-1" /> : <ChevronDown size={14} className="inline ml-1" />) : ''}
                       </th>
                     ))}
                   </tr>
