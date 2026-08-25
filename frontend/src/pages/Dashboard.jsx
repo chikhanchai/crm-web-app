@@ -74,7 +74,29 @@ const ALL_COLUMNS = [
 ];
 
 
+
+const getRowColorClass = (tier) => {
+  if (!tier) return "bg-white hover:bg-gray-50";
+  const t = String(tier).toLowerCase();
+  if (t.includes('premium')) return "bg-green-100 hover:bg-green-200";
+  if (t.includes('gold')) return "bg-yellow-100 hover:bg-yellow-200";
+  if (t.includes('silver')) return "bg-blue-100 hover:bg-blue-200";
+  if (t.includes('key focus')) return "bg-pink-100 hover:bg-pink-200";
+  return "bg-white hover:bg-gray-50";
+};
+
+const getStickyColorClass = (tier) => {
+  if (!tier) return "bg-white group-hover:bg-gray-50";
+  const t = String(tier).toLowerCase();
+  if (t.includes('premium')) return "bg-green-100 group-hover:bg-green-200";
+  if (t.includes('gold')) return "bg-yellow-100 group-hover:bg-yellow-200";
+  if (t.includes('silver')) return "bg-blue-100 group-hover:bg-blue-200";
+  if (t.includes('key focus')) return "bg-pink-100 group-hover:bg-pink-200";
+  return "bg-white group-hover:bg-gray-50";
+};
+
 const formatNumber = (val) => {
+
   if (val === null || val === undefined || val === '') return '-';
   const num = Number(val);
   return isNaN(num) ? val : num.toLocaleString('en-US');
@@ -331,7 +353,7 @@ export default function Dashboard() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {displayedCustomers.map((c) => (
-                  <tr key={c.id} className="hover:bg-blue-50 transition-colors">
+                  <tr key={c.id} className={`transition-colors group ${getRowColorClass(c.FOCUS_TIER)}`}>
                     <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{c.CUSTOMER_NAME}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-500">{c.M_BUSINESS_ID || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-500">
@@ -371,8 +393,8 @@ export default function Dashboard() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {displayedCustomers.map((c) => (
-                    <tr key={c.id} className="hover:bg-green-50 transition-colors">
-                      <td className="px-4 py-2 whitespace-nowrap border-r border-gray-200 bg-white sticky left-0 z-10">
+                    <tr key={c.id} className={`transition-colors group ${getRowColorClass(c.FOCUS_TIER)}`}>
+                      <td className={`px-4 py-2 whitespace-nowrap border-r border-gray-200 sticky left-0 z-10 ${getStickyColorClass(c.FOCUS_TIER)}`}>
                         <Link to={`/customers/${c.id}`} className="text-blue-600 font-bold hover:underline">Edit</Link>
                       </td>
                                             {ALL_COLUMNS.map(col => (
